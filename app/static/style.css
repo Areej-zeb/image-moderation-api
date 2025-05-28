@@ -1,0 +1,104 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f6f7f9;
+  font-family: "Segoe UI", sans-serif;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+}
+
+/* Layout container */
+.wrapper {
+  width: 100%;
+  max-width: 440px;
+}
+
+/* Card */
+.card {
+  background-color: #fff;
+  padding: 24px 28px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Header */
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  color: #222;
+}
+
+/* Form elements */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+label {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #444;
+}
+
+input[type="text"],
+input[type="file"] {
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  background-color: #fafafa;
+  transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="file"]:focus {
+  border-color: #4d90fe;
+  outline: none;
+}
+
+/* Button */
+button {
+  background-color: #3478f6;
+  color: white;
+  border: none;
+  padding: 0.7rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #2a65cd;
+}
+
+/* Result box */
+.result {
+  padding: 1rem;
+  background-color: #f1f6ff;
+  border-left: 4px solid #3478f6;
+  border-radius: 6px;
+  font-size: 0.94rem;
+  white-space: pre-wrap;
+  color: #222;
+}
+
+.hidden {
+  display: none;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Moderation</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="wrapper">
+    <section class="card">
+      <h1 class="title">Image Moderation</h1>
+
+      <form id="moderationForm" onsubmit="event.preventDefault(); submitImage();">
+        <label for="tokenInput">Bearer Token</label>
+        <input type="text" id="tokenInput" placeholder="Paste your token" required />
+
+        <label for="imageInput">Select an Image</label>
+        <input type="file" id="imageInput" accept="image/*" required />
+
+        <button type="submit">Moderate Image</button>
+      </form>
+
+      <div id="result" class="result hidden"></div>
+    </section>
+  </main>
+  <script src="/static/script.js"></script>
+</body>
+</html>

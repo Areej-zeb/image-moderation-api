@@ -27,6 +27,8 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # Serve index.html at "/"
+
+
 @app.get("/")
 def serve_frontend():
     index_path = os.path.join("app", "static", "index.html")

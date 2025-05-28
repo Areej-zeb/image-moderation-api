@@ -9,24 +9,15 @@ auth_router = APIRouter()
 
 # Admin token verification
 def verify_admin_token(authorization: str = Header(..., alias="Authorization")):
-    try:
-        print("AUTH HEADER:", authorization)
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Invalid token format")
 
-        if not authorization.startswith("Bearer "):
-            raise HTTPException(status_code=401, detail="Invalid token format")
+    token = authorization.split(" ")[1]
+    record = tokens_collection.find_one({"token": token})
+    if not record or not record.get("isAdmin", False):
+        raise HTTPException(status_code=403, detail="Admin token required")
 
-        token = authorization.split(" ")[1]
-        record = tokens_collection.find_one({"token": token})
-
-        print("DB RECORD:", record)
-
-        if not record or not record.get("isAdmin", False):
-            raise HTTPException(status_code=403, detail="Admin token required")
-
-        return record
-    except Exception as e:
-        print("AUTH ERROR:", str(e))
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+    return record
 
 # POST /auth/tokens
 @auth_router.post("/auth/tokens", response_model=TokenOut)
@@ -49,7 +40,7 @@ def list_tokens(_=Depends(verify_admin_token)):
     tokens = tokens_collection.find()
     output = []
     for token in tokens:
-        token.pop("_id", None)  # Remove MongoDB ObjectId
+        token.pop("_id", None)
         if isinstance(token.get("createdAt"), datetime):
             token["createdAt"] = token["createdAt"].isoformat()
         output.append(token)

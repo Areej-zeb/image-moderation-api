@@ -7,16 +7,19 @@ client = TestClient(app)
 
 # --- Fixtures ---
 
+
 @pytest.fixture
 def valid_token():
     # Replace with a real token from your DB if needed
     return "128d8249e357b82f7e3e68ab65eca6c3"
+
 
 @pytest.fixture
 def test_image_path():
     return "app/static/test.jpg"  # ensure this file exists in your repo
 
 # --- Tests ---
+
 
 def test_health_check():
     response = client.get("/health")
@@ -53,7 +56,8 @@ def test_moderate_with_mocked_api(mock_post, valid_token, test_image_path):
 
     headers = {"Authorization": f"Bearer {valid_token}"}
     with open(test_image_path, "rb") as img:
-        response = client.post("/moderate", headers=headers, files={"file": img})
+        response = client.post(
+            "/moderate", headers=headers, files={"file": img})
 
     assert response.status_code == 200
     result = response.json()

@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 
 from app.core.db import tokens_collection, usages_collection
 
-
 load_dotenv()
 
 moderation_router = APIRouter()
@@ -23,7 +22,7 @@ SIGHTENGINE_USER = os.getenv("SIGHTENGINE_USER")
 SIGHTENGINE_SECRET = os.getenv("SIGHTENGINE_SECRET")
 
 
-def verify_token(authorization: str = Header(...)):
+def verify_token(authorization: str = Header(...)) -> str:
     if not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Invalid token format")
 
@@ -49,9 +48,9 @@ async def moderate_image(
 
     filename = file.filename or "upload.jpg"
     temp_path = os.path.join(tempfile.gettempdir(), filename)
+
     with open(temp_path, "wb") as f:
         f.write(await file.read())
-
 
     try:
         url = "https://api.sightengine.com/1.0/check.json"
@@ -106,7 +105,7 @@ async def moderate_image(
         })
 
         return {
-            "filename": file.filename,
+            "filename": filename,
             "safe": is_safe,
             "categories": categories
         }

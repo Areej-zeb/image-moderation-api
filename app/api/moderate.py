@@ -41,15 +41,17 @@ async def moderate_image(
     token: str = Depends(verify_token),
     file: UploadFile = File(...)
 ):
-    if not file.content_type.startswith("image/"):
+    if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(
             status_code=400,
             detail="Only image files are allowed"
         )
 
-    temp_path = os.path.join(tempfile.gettempdir(), file.filename)
+    filename = file.filename or "upload.jpg"
+    temp_path = os.path.join(tempfile.gettempdir(), filename)
     with open(temp_path, "wb") as f:
         f.write(await file.read())
+
 
     try:
         url = "https://api.sightengine.com/1.0/check.json"

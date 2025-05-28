@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Header, HTTPException, Depends
 from app.core.db import usages_collection, tokens_collection
-from app.models.usage import UsageOut
+from app.models.usage_log import UsageOut
+
 
 usage_router = APIRouter()
+
 
 def verify_admin_token(authorization: str = Header(...)):
     if not authorization.startswith("Bearer "):
@@ -12,6 +14,7 @@ def verify_admin_token(authorization: str = Header(...)):
     if not record or not record.get("isAdmin", False):
         raise HTTPException(status_code=403, detail="Admin token required")
     return token
+
 
 @usage_router.get("/usage", response_model=list[UsageOut])
 def get_usage(_=Depends(verify_admin_token)):

@@ -2,10 +2,18 @@ import os
 import requests
 import tempfile
 from datetime import datetime, timezone
-from fastapi import APIRouter, File, UploadFile, HTTPException, Depends, Header
+from fastapi import (
+    APIRouter,
+    File,
+    UploadFile,
+    HTTPException,
+    Depends,
+    Header
+)
+from dotenv import load_dotenv
 
 from app.core.db import tokens_collection, usages_collection
-from dotenv import load_dotenv
+
 
 load_dotenv()
 
@@ -14,19 +22,30 @@ moderation_router = APIRouter()
 SIGHTENGINE_USER = os.getenv("SIGHTENGINE_USER")
 SIGHTENGINE_SECRET = os.getenv("SIGHTENGINE_SECRET")
 
+
 def verify_token(authorization: str = Header(...)):
     if not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Invalid token format")
+
     token = authorization.split(" ")[1]
     record = tokens_collection.find_one({"token": token})
+
     if not record:
         raise HTTPException(status_code=403, detail="Invalid token")
+
     return token
 
+
 @moderation_router.post("/moderate")
-async def moderate_image(token: str = Depends(verify_token), file: UploadFile = File(...)):
+async def moderate_image(
+    token: str = Depends(verify_token),
+    file: UploadFile = File(...)
+):
     if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="Only image files are allowed")
+        raise HTTPException(
+            status_code=400,
+            detail="Only image files are allowed"
+        )
 
     temp_path = os.path.join(tempfile.gettempdir(), file.filename)
     with open(temp_path, "wb") as f:
@@ -41,7 +60,11 @@ async def moderate_image(token: str = Depends(verify_token), file: UploadFile = 
         }
 
         with open(temp_path, "rb") as media_file:
-            response = requests.post(url, data=params, files={"media": media_file})
+            response = requests.post(
+                url,
+                data=params,
+                files={"media": media_file}
+            )
             result = response.json()
 
         categories = []

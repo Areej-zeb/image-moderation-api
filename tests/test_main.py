@@ -62,7 +62,9 @@ def test_moderate_with_mocked_api(
 
     headers = {"Authorization": f"Bearer {valid_token}"}
     with open(test_image_path, "rb") as img:
-        response = client.post("/moderate", headers=headers, files={"file": img})
+        response = client.post(
+            "/moderate", headers=headers, files={"file": img}
+        )
 
     if response.status_code != 200:
         print("Response text:", response.text)

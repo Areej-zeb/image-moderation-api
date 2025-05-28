@@ -1,9 +1,11 @@
-# Byte-compiled / cache
-__pycache__/
-*.py[cod]
-*.env
-.venv/
+# Python
 venv/
+__pycache__/
+*.pyc
+.env
 
-# VSCode
-.vscode/
+# Docker
+*.log
+*.db
+*.sqlite3
+.env

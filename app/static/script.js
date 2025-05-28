@@ -25,16 +25,24 @@ async function submitImage() {
     });
 
     const data = await res.json();
+    console.log("MODERATION RESULT:", data);
 
     if (!res.ok) {
       resultBox.textContent = `❌ Error: ${data.detail || res.statusText}`;
       return;
     }
 
-    let output = `Filename: ${data.filename}\nSafe: ${data.safe ? "✅ Yes" : "❌ No"}\n\nCategories:\n`;
-    data.categories.forEach(cat => {
-      output += `- ${cat.label}: ${(cat.confidence * 100).toFixed(1)}%\n`;
-    });
+    let output = `📝 Filename: ${data.filename}\n`;
+    output += `✅ Safe: ${data.safe ? "Yes" : "❌ No"}\n\n`;
+    output += `📊 Categories:\n`;
+
+    if (Array.isArray(data.categories) && data.categories.length > 0) {
+      data.categories.forEach(cat => {
+        output += `- ${cat.label}: ${(cat.confidence * 100).toFixed(1)}%\n`;
+      });
+    } else {
+      output += "No content flags detected.";
+    }
 
     resultBox.textContent = output;
 
